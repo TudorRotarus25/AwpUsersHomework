@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+{% block content %}
+  <h2>News feed</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Post">
+  </form>
+  {% for post in posts %}
+    <div class="user-post">
+      <hr>
+      <h3>
+        {{ post.text | slice:":15" }}
+        {% if post.text|length > 15 %}
+        ...
+        {% endif %}
+      </h3>
+      <p>
+        by <a href="{% url 'view_profile_payload' post.author.pk %}"><small>{{ post.author }}</small></a>
+        on <b><small>{{ post.date_added }}</small></b>
+      </p>
+      <a href="{% url 'post_details' post.pk %}"><small>See more</small></a>
+    </div>
+  {% endfor %}
+{% endblock %}
